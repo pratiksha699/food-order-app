@@ -1,38 +1,48 @@
 import { useContext } from "react";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 import classes from "./Cart.module.css";
 import Modal from "../UI/Modal";
 import CartContext from "../../store/cart-context";
 import CartItem from "./CartItem";
 
 const Cart = (props) => {
-  const cartCtx = useContext(CartContext);
+  const items = useSelector((state) => state.cart.items);
 
-  const cartItemRemoveHandler = id => {
-    cartCtx.removeItem(id);
-   };
+  const totalPrice = useSelector((state) => state.cart.totalPrice);
 
-  const cartItemAddHandler = item => {
-    cartCtx.addItem({...item, amount: 1});
-   };
+  // const cartCtx = useContext(CartContext);
+
+  // const cartItemRemoveHandler = id => {
+  //   cartCtx.removeItem(id);
+  //  };
+
+  // const cartItemAddHandler = item => {
+  //   cartCtx.addItem({...item, amount: 1});
+  //  };
 
   const cartItems = (
     <ul className={classes["cart-items"]}>
-      {cartCtx.items.map((item) => (
+      {items.map((item) => (
         <CartItem
           key={item.id}
-          name={item.name}
-          amount={item.amount}
-          price={item.price}
-          onRemove={cartItemRemoveHandler.bind(null, item.id)}
-          onAdd ={cartItemAddHandler.bind(null, item)}
+          item={{
+            id: item.id,
+            name: item.name,
+            amount: item.quantity,
+            price: item.price,
+            totalPrice: item.totalPrice,
+          }}
+         
+          // onRemove={cartItemRemoveHandler.bind(null, item.id)}
+          // onAdd ={cartItemAddHandler.bind(null, item)}
         />
       ))}
     </ul>
   );
 
-  const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
+  const totalAmount = `$${totalPrice.toFixed(2)}`;
 
-  const hasItems = cartCtx.items.length > 0;
+  const hasItems = items.length > 0;
 
   return (
     <Modal onClose={props.onClose}>

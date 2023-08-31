@@ -1,28 +1,31 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Header from "./components/Layout/Header";
 import Meals from "./components/Meals/Meals";
 import Cart from "./components/Cart/Cart";
-import CartProvider from "./store/CartProvider";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { uiActions } from "./store/ui-slice";
 
 function App() {
-  const [cartIsShown, setCartIsShown] = useState(false);
+  // const [cartIsShown, setCartIsShown] = useState(false);
 
-  const showCartHandler = () => {
-    setCartIsShown(true);
-  };
+  const dispatch = useDispatch();
+
+  const cartIsShown = useSelector(state => state.ui.cartIsVisible);
+  console.log(cartIsShown);
 
   const hideCartHandler = () => {
-    setCartIsShown(false);
+    dispatch(uiActions.closeCart());
   };
 
   return (
-    <CartProvider>
+    <>
       {cartIsShown && <Cart onClose={hideCartHandler} />}
-      <Header onShowCart={showCartHandler} />
+      <Header/>
       <main>
         <Meals />
       </main>
-    </CartProvider>
+    </>
   );
 }
 

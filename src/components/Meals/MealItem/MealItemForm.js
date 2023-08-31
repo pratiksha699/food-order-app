@@ -21,7 +21,10 @@ const MealItemForm = (props) => {
       return;
     }
 
+    console.log(enteredAmountNumber);
     props.onAddToCart(enteredAmountNumber);
+
+    // have to send this enteredAmountNumber to store
   };
 
   return (
